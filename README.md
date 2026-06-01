@@ -1,4 +1,4 @@
-# Online Shop & Inventory System
+# BDStore-1971
 
 A CLI-based C++ shopping system demonstrating OOP principles: inheritance, polymorphism, encapsulation, abstraction, composition, and exception handling.
 

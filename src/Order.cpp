@@ -22,6 +22,7 @@ Order::Order(int oid, string user, string date, double total, string stat, vecto
 int Order::getOrderId() const { return orderId; }
 string Order::getCustomer() const { return customerUsername; }
 double Order::getTotal() const { return totalAmount; }
+string Order::getDate() const { return orderDate; }
 string Order::getStatus() const { return status; }
 vector<CartItem> Order::getItems() const { return items; }
 
@@ -31,7 +32,7 @@ string Order::toFileString() const {
        << fixed << setprecision(2) << totalAmount << "|" << status;
 
     ss << "|";
-    for (int i = 0; i < items.size(); i++) {
+    for (size_t i = 0; i < items.size(); i++) {
         if (i > 0) ss << ",";
         ss << items[i].productId << ":" << items[i].quantity;
     }

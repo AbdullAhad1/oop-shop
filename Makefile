@@ -9,6 +9,7 @@ SRC = src/ShopException.cpp \
       src/Cart.cpp \
       src/Order.cpp \
       src/Inventory.cpp \
+      src/UI.cpp \
       src/main.cpp
 
 OBJ = $(SRC:src/%.cpp=build/%.o)
@@ -31,4 +32,6 @@ clean:
 run: $(TARGET)
 	./$(TARGET)
 
-.PHONY: all clean run
+start: run
+
+.PHONY: all clean run start

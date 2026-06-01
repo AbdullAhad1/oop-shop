@@ -20,6 +20,8 @@ void Inventory::loadFromFile() {
     while (getline(file, line)) {
         if (line.empty()) continue;
         Product p = Product::fromFileString(line);
+        // Skip invalid products (id == 0 means parsing failed)
+        if (p.getId() == 0) continue;
         products.push_back(p);
         if (p.getId() >= nextProductId) {
             nextProductId = p.getId() + 1;
@@ -33,7 +35,7 @@ void Inventory::saveToFile() {
     if (!file.is_open()) {
         throw ShopException("Cannot open file for writing.");
     }
-    for (int i = 0; i < products.size(); i++) {
+    for (size_t i = 0; i < products.size(); i++) {
         file << products[i].toFileString() << endl;
     }
     file.close();
@@ -45,7 +47,7 @@ void Inventory::addProduct(Product p) {
 }
 
 void Inventory::updateProduct(int id, Product p) {
-    for (int i = 0; i < products.size(); i++) {
+    for (size_t i = 0; i < products.size(); i++) {
         if (products[i].getId() == id) {
             products[i] = p;
             saveToFile();
@@ -56,7 +58,7 @@ void Inventory::updateProduct(int id, Product p) {
 }
 
 void Inventory::deleteProduct(int id) {
-    for (int i = 0; i < products.size(); i++) {
+    for (size_t i = 0; i < products.size(); i++) {
         if (products[i].getId() == id) {
             products.erase(products.begin() + i);
             saveToFile();
@@ -67,7 +69,7 @@ void Inventory::deleteProduct(int id) {
 }
 
 Product* Inventory::findProduct(int id) {
-    for (int i = 0; i < products.size(); i++) {
+    for (size_t i = 0; i < products.size(); i++) {
         if (products[i].getId() == id) {
             return &products[i];
         }
@@ -81,7 +83,7 @@ void Inventory::displayAll() const {
         cout << "No products available." << endl;
         return;
     }
-    for (int i = 0; i < products.size(); i++) {
+    for (size_t i = 0; i < products.size(); i++) {
         cout << "ID: " << products[i].getId()
              << " | Name: " << products[i].getName()
              << " | Price: $" << products[i].getPrice()
@@ -93,7 +95,7 @@ void Inventory::displayAll() const {
 void Inventory::displayAvailable() const {
     cout << "\n----- AVAILABLE PRODUCTS -----" << endl;
     bool any = false;
-    for (int i = 0; i < products.size(); i++) {
+    for (size_t i = 0; i < products.size(); i++) {
         if (products[i].getStock() > 0) {
             any = true;
             cout << "ID: " << products[i].getId()

@@ -20,6 +20,7 @@ public:
     int getOrderId() const;
     string getCustomer() const;
     double getTotal() const;
+    string getDate() const;
     string getStatus() const;
     vector<CartItem> getItems() const;
 

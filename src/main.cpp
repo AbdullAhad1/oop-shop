@@ -14,6 +14,7 @@
 #include "../include/Cart.hpp"
 #include "../include/Order.hpp"
 #include "../include/ShopException.hpp"
+#include "../include/UI.hpp"
 
 using namespace std;
 
@@ -27,17 +28,16 @@ string ordersFile = "data/orders.txt";
 void saveUsers() {
     ofstream file(usersFile);
     if (!file.is_open()) {
-        cout << "Warning: could not save users." << endl;
+        UI::drawWarning("Could not save users.");
         return;
     }
-    for (int i = 0; i < users.size(); i++) {
+    for (int i = 0; i < (int)users.size(); i++) {
         file << users[i]->getRole() << "|" << users[i]->getUsername() << endl;
     }
     file.close();
 }
 
-// Load users from file (passwords are not stored for simplicity in this demo)
-// In a real system, you would store hashed passwords
+// Load users from file
 void loadUsers() {
     ifstream file(usersFile);
     if (!file.is_open()) return;
@@ -50,7 +50,6 @@ void loadUsers() {
         getline(ss, role, '|');
         getline(ss, uname, '|');
 
-        // Default password same as username for demo
         if (role == "admin") {
             users.push_back(new Admin(uname, uname));
         } else {
@@ -62,23 +61,20 @@ void loadUsers() {
 
 // Register a new user
 void registerUser(Inventory& inv) {
-    cout << "\n--- Register ---" << endl;
-    cout << "Enter username: ";
-    string uname;
-    cin >> uname;
+    UI::drawHeader("REGISTER NEW USER");
 
-    for (int i = 0; i < users.size(); i++) {
+    string uname = UI::inputString("Username");
+
+    for (int i = 0; i < (int)users.size(); i++) {
         if (users[i]->getUsername() == uname) {
-            cout << "Username already exists." << endl;
+            UI::drawError("Username already exists.");
             return;
         }
     }
 
-    cout << "Enter password: ";
-    string pass;
-    cin >> pass;
+    string pass = UI::inputString("Password");
 
-    cout << "Role (1=Customer, 2=Admin): ";
+    UI::drawPrompt("Role (1=Customer, 2=Admin)");
     int roleChoice;
     cin >> roleChoice;
 
@@ -89,27 +85,24 @@ void registerUser(Inventory& inv) {
     }
 
     saveUsers();
-    cout << "Registration successful." << endl;
+    UI::drawSuccess("Registration successful.");
 }
 
 // Login: returns pointer to User (runtime polymorphism)
 User* login() {
-    cout << "\n--- Login ---" << endl;
-    cout << "Username: ";
-    string uname;
-    cin >> uname;
-    cout << "Password: ";
-    string pass;
-    cin >> pass;
+    UI::drawHeader("LOGIN");
 
-    for (int i = 0; i < users.size(); i++) {
+    string uname = UI::inputString("Username");
+    string pass = UI::inputString("Password");
+
+    for (int i = 0; i < (int)users.size(); i++) {
         if (users[i]->getUsername() == uname && users[i]->checkPassword(pass)) {
-            cout << "Login successful. Welcome, " << uname << "!" << endl;
+            UI::drawSuccess("Welcome, " + uname + "!");
             return users[i];
         }
     }
 
-    cout << "Invalid username or password." << endl;
+    UI::drawError("Invalid username or password.");
     return NULL;
 }
 
@@ -128,7 +121,7 @@ string getCurrentDate() {
 void saveOrders() {
     ofstream file(ordersFile);
     if (!file.is_open()) return;
-    for (int i = 0; i < orders.size(); i++) {
+    for (int i = 0; i < (int)orders.size(); i++) {
         file << orders[i].toFileString() << endl;
     }
     file.close();
@@ -153,85 +146,92 @@ void loadOrders() {
 
 // View all orders (admin)
 void viewAllOrders() {
-    cout << "\n----- ALL ORDERS -----" << endl;
+    UI::drawHeader("ALL ORDERS");
     if (orders.empty()) {
-        cout << "No orders yet." << endl;
+        UI::drawInfo("No orders yet.");
         return;
     }
-    for (int i = 0; i < orders.size(); i++) {
-        cout << "Order #" << orders[i].getOrderId()
-             << " | Customer: " << orders[i].getCustomer()
-             << " | Date: " << orders[i].getStatus()
-             << " | Total: $" << fixed << setprecision(2) << orders[i].getTotal() << endl;
+    UI::drawTableHeader("Order#", "Customer", "Date", "Total");
+    for (int i = 0; i < (int)orders.size(); i++) {
+        stringstream ss;
+        ss << fixed << setprecision(2) << orders[i].getTotal();
+        UI::drawTableRow(
+            to_string(orders[i].getOrderId()),
+            orders[i].getCustomer(),
+            orders[i].getStatus(),
+            "$" + ss.str()
+        );
     }
 }
 
 // View customer orders
 void viewMyOrders(string username) {
-    cout << "\n----- MY ORDERS -----" << endl;
+    UI::drawHeader("MY ORDERS");
     bool found = false;
-    for (int i = 0; i < orders.size(); i++) {
+    for (int i = 0; i < (int)orders.size(); i++) {
         if (orders[i].getCustomer() == username) {
             found = true;
-            cout << "Order #" << orders[i].getOrderId()
-                 << " | Date: " << orders[i].getStatus()
-                 << " | Total: $" << fixed << setprecision(2) << orders[i].getTotal() << endl;
+            stringstream ss;
+            ss << fixed << setprecision(2) << orders[i].getTotal();
+            UI::drawTableRow(
+                to_string(orders[i].getOrderId()),
+                orders[i].getStatus(),
+                "$" + ss.str()
+            );
         }
     }
     if (!found) {
-        cout << "No orders found." << endl;
+        UI::drawInfo("No orders found.");
     }
 }
 
 // Customer operations
 void customerBrowse(Inventory& inv) {
+    UI::drawHeader("AVAILABLE PRODUCTS");
     inv.displayAvailable();
 }
 
 void customerAddToCart(Cart& cart, Inventory& inv) {
-    cout << "Enter Product ID: ";
-    int pid;
-    cin >> pid;
-    cout << "Enter Quantity: ";
-    int qty;
-    cin >> qty;
+    UI::drawHeader("ADD TO CART");
+    int pid = UI::inputInt("Product ID");
+    int qty = UI::inputInt("Quantity");
 
     try {
         cart.addItem(pid, qty, inv);
     } catch (ShopException& e) {
-        cout << "Error: " << e.what() << endl;
+        UI::drawError(e.what());
     }
 }
 
 void customerRemoveFromCart(Cart& cart) {
-    cout << "Enter Product ID to remove: ";
-    int pid;
-    cin >> pid;
+    UI::drawHeader("REMOVE FROM CART");
+    int pid = UI::inputInt("Product ID to remove");
     try {
         cart.removeItem(pid);
     } catch (ShopException& e) {
-        cout << "Error: " << e.what() << endl;
+        UI::drawError(e.what());
     }
 }
 
 void customerCheckout(Cart& cart, Inventory& inv, string username) {
+    UI::drawHeader("CHECKOUT");
     if (cart.isEmpty()) {
-        cout << "Cart is empty." << endl;
+        UI::drawWarning("Cart is empty.");
         return;
     }
 
     cart.viewCart(inv);
-    cout << "\nConfirm checkout? (1=Yes, 0=No): ";
+    UI::drawPrompt("Confirm checkout? (1=Yes, 0=No)");
     int confirm;
     cin >> confirm;
     if (confirm != 1) {
-        cout << "Checkout cancelled." << endl;
+        UI::drawInfo("Checkout cancelled.");
         return;
     }
 
     // Deduct stock
     vector<CartItem> items = cart.getItems();
-    for (int i = 0; i < items.size(); i++) {
+    for (int i = 0; i < (int)items.size(); i++) {
         Product* p = inv.findProduct(items[i].productId);
         if (p != NULL) {
             p->reduceStock(items[i].quantity);
@@ -247,59 +247,53 @@ void customerCheckout(Cart& cart, Inventory& inv, string username) {
     saveOrders();
 
     cart.clear();
-    cout << "Order placed successfully! Order #" << newOrder.getOrderId() << endl;
+    UI::drawSuccess("Order placed! Order #" + to_string(newOrder.getOrderId()));
 }
 
 // Admin operations
 void adminAddProduct(Inventory& inv) {
+    UI::drawHeader("ADD NEW PRODUCT");
     cin.ignore();
-    cout << "Enter product name: ";
+    UI::drawPrompt("Product name");
     string name;
     getline(cin, name);
-    cout << "Enter description: ";
+    UI::drawPrompt("Description");
     string desc;
     getline(cin, desc);
-    cout << "Enter price: ";
-    double price;
-    cin >> price;
-    cout << "Enter stock quantity: ";
-    int qty;
-    cin >> qty;
+    double price = UI::inputDouble("Price");
+    int qty = UI::inputInt("Stock quantity");
 
     Product p(inv.getNextId(), name, desc, price, qty);
     inv.addProduct(p);
-    cout << "Product added with ID: " << p.getId() << endl;
+    UI::drawSuccess("Product added with ID: " + to_string(p.getId()));
 }
 
 void adminUpdateStock(Inventory& inv) {
-    cout << "Enter Product ID: ";
-    int pid;
-    cin >> pid;
+    UI::drawHeader("UPDATE STOCK");
+    int pid = UI::inputInt("Product ID");
     Product* p = inv.findProduct(pid);
     if (p == NULL) {
-        cout << "Product not found." << endl;
+        UI::drawError("Product not found.");
         return;
     }
-    cout << "Enter new stock quantity: ";
-    int qty;
-    cin >> qty;
+    int qty = UI::inputInt("New stock quantity");
     p->setStock(qty);
     inv.saveToFile();
-    cout << "Stock updated." << endl;
+    UI::drawSuccess("Stock updated.");
 }
 
 void adminDeleteProduct(Inventory& inv) {
-    cout << "Enter Product ID to delete: ";
-    int pid;
-    cin >> pid;
+    UI::drawHeader("DELETE PRODUCT");
+    int pid = UI::inputInt("Product ID to delete");
     try {
         inv.deleteProduct(pid);
-        cout << "Product deleted." << endl;
+        UI::drawSuccess("Product deleted.");
     } catch (ShopException& e) {
-        cout << "Error: " << e.what() << endl;
+        UI::drawError(e.what());
     }
 }
 
+// Main entry
 int main() {
     Inventory inventory("data/products.txt");
     Cart cart;
@@ -308,24 +302,26 @@ int main() {
     loadOrders();
 
     if (users.empty()) {
-        // Create default admin
         users.push_back(new Admin("admin", "admin"));
         saveUsers();
     }
 
-    cout << "=================================" << endl;
-    cout << "  ONLINE SHOP & INVENTORY SYSTEM" << endl;
-    cout << "=================================" << endl;
+    UI::clearScreen();
+    UI::drawLogo();
+    UI::drawBanner("ONLINE SHOP & INVENTORY SYSTEM");
 
     User* currentUser = NULL;
     bool running = true;
 
     while (running) {
         if (currentUser == NULL) {
-            cout << "\n1. Login" << endl;
-            cout << "2. Register" << endl;
-            cout << "0. Exit" << endl;
-            cout << "Choice: ";
+            UI::drawHeader("MAIN MENU");
+            UI::drawMenuItem(1, "Login");
+            UI::drawMenuItem(2, "Register");
+            UI::drawMenuItem(0, "Exit");
+            UI::drawSeparator('=');
+
+            UI::drawPrompt("Choice");
             int choice;
             cin >> choice;
 
@@ -336,12 +332,16 @@ int main() {
             } else if (choice == 0) {
                 running = false;
             } else {
-                cout << "Invalid choice." << endl;
+                UI::drawError("Invalid choice.");
             }
         } else {
             // Runtime polymorphism: base pointer calls derived class function
+            UI::clearScreen();
+            UI::drawSmallLogo();
             currentUser->displayMenu();
-            cout << "Choice: ";
+            UI::drawSeparator('=');
+
+            UI::drawPrompt("Choice");
             int choice;
             cin >> choice;
 
@@ -362,8 +362,11 @@ int main() {
                     viewMyOrders(currentUser->getUsername());
                 } else if (choice == 0) {
                     currentUser = NULL;
+                    UI::clearScreen();
+                    UI::drawLogo();
+                    UI::drawBanner("ONLINE SHOP & INVENTORY SYSTEM");
                 } else {
-                    cout << "Invalid choice." << endl;
+                    UI::drawError("Invalid choice.");
                 }
             } else if (role == "admin") {
                 if (choice == 1) {
@@ -378,19 +381,30 @@ int main() {
                     viewAllOrders();
                 } else if (choice == 0) {
                     currentUser = NULL;
+                    UI::clearScreen();
+                    UI::drawLogo();
+                    UI::drawBanner("ONLINE SHOP & INVENTORY SYSTEM");
                 } else {
-                    cout << "Invalid choice." << endl;
+                    UI::drawError("Invalid choice.");
                 }
+            }
+
+            if (currentUser != NULL) {
+                UI::drawThinSeparator('-');
+                UI::drawInfo("Press Enter to continue...");
+                cin.ignore();
+                cin.get();
             }
         }
     }
 
     // Cleanup
-    for (int i = 0; i < users.size(); i++) {
+    for (int i = 0; i < (int)users.size(); i++) {
         delete users[i];
     }
     users.clear();
 
-    cout << "Goodbye!" << endl;
+    UI::clearScreen();
+    UI::drawBanner("GOODBYE!");
     return 0;
 }

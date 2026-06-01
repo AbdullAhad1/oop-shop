@@ -16,10 +16,9 @@ void Cart::addItem(int pid, int qty, Inventory& inv) {
         throw ShopException("Not enough stock available.");
     }
 
-    for (int i = 0; i < items.size(); i++) {
+    for (size_t i = 0; i < items.size(); i++) {
         if (items[i].productId == pid) {
             items[i].quantity += qty;
-            cout << "Updated quantity in cart." << endl;
             return;
         }
     }
@@ -28,14 +27,12 @@ void Cart::addItem(int pid, int qty, Inventory& inv) {
     item.productId = pid;
     item.quantity = qty;
     items.push_back(item);
-    cout << "Added to cart." << endl;
 }
 
 void Cart::removeItem(int pid) {
-    for (int i = 0; i < items.size(); i++) {
+    for (size_t i = 0; i < items.size(); i++) {
         if (items[i].productId == pid) {
             items.erase(items.begin() + i);
-            cout << "Removed from cart." << endl;
             return;
         }
     }
@@ -56,10 +53,9 @@ void Cart::updateQuantity(int pid, int qty, Inventory& inv) {
         throw ShopException("Not enough stock available.");
     }
 
-    for (int i = 0; i < items.size(); i++) {
+    for (size_t i = 0; i < items.size(); i++) {
         if (items[i].productId == pid) {
             items[i].quantity = qty;
-            cout << "Quantity updated." << endl;
             return;
         }
     }
@@ -78,7 +74,7 @@ void Cart::viewCart(Inventory& inv) const {
 
     cout << "\n----- YOUR CART -----" << endl;
     double total = 0;
-    for (int i = 0; i < items.size(); i++) {
+    for (size_t i = 0; i < items.size(); i++) {
         Product* p = inv.findProduct(items[i].productId);
         if (p != NULL) {
             double subtotal = p->getPrice() * items[i].quantity;
@@ -94,7 +90,7 @@ void Cart::viewCart(Inventory& inv) const {
 
 double Cart::getTotal(Inventory& inv) const {
     double total = 0;
-    for (int i = 0; i < items.size(); i++) {
+    for (size_t i = 0; i < items.size(); i++) {
         Product* p = inv.findProduct(items[i].productId);
         if (p != NULL) {
             total += p->getPrice() * items[i].quantity;

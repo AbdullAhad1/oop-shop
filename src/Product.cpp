@@ -47,9 +47,18 @@ Product Product::fromFileString(string line) {
     getline(ss, pStr, '|');
     getline(ss, qStr, '|');
 
-    int id = stoi(idStr);
-    double p = stod(pStr);
-    int q = stoi(qStr);
+    int id = 0;
+    double p = 0.0;
+    int q = 0;
+
+    try {
+        id = stoi(idStr);
+        p = stod(pStr);
+        q = stoi(qStr);
+    } catch (...) {
+        // Return default product if parsing fails
+        return Product();
+    }
 
     return Product(id, n, d, p, q);
 }
