@@ -121,16 +121,18 @@ namespace UI {
              << DIM << "  " << shortcut << RESET << endl;
     }
 
-    void drawStatusBar(string left, string center, string right) {
+    void drawMainMenu() {
         cout << endl;
-        cout << BG_BLACK << GOLD;
-        cout << " " << left;
-        int pad = 58 - left.length() - center.length() - right.length();
-        for (int i = 0; i < pad / 2; i++) cout << " ";
-        cout << center;
-        for (int i = 0; i < pad - pad / 2; i++) cout << " ";
-        cout << right << " ";
-        cout << RESET << endl;
+        cout << "  " << GOLD << "┌─────────────────────────────┐" << RESET << "  " << GOLD << "┌─────────────────────────────┐" << RESET << endl;
+        cout << "  " << GOLD << "│" << BOLD << WHITE << "  [1] CUSTOMER LOGIN       " << RESET << GOLD << "│" << RESET
+             << "  " << GOLD << "│" << BOLD << WHITE << "  [2] ADMIN LOGIN          " << RESET << GOLD << "│" << RESET << endl;
+        cout << "  " << GOLD << "└─────────────────────────────┘" << RESET << "  " << GOLD << "└─────────────────────────────┘" << RESET << endl;
+        cout << endl;
+        cout << "  " << GOLD << "┌─────────────────────────────┐" << RESET << "  " << GOLD << "┌─────────────────────────────┐" << RESET << endl;
+        cout << "  " << GOLD << "│" << BOLD << WHITE << "  [3] SIGN UP              " << RESET << GOLD << "│" << RESET
+             << "  " << GOLD << "│" << BOLD << WHITE << "  [0] EXIT                 " << RESET << GOLD << "│" << RESET << endl;
+        cout << "  " << GOLD << "└─────────────────────────────┘" << RESET << "  " << GOLD << "└─────────────────────────────┘" << RESET << endl;
+        cout << endl;
     }
 
     void drawPrompt(string text) {

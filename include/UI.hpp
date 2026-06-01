@@ -64,7 +64,7 @@ namespace UI {
     void drawThinSeparator(char c = '-');
     void drawMenuItem(int num, string label);
     void drawMenuItem(int num, string label, string shortcut);
-    void drawStatusBar(string left, string center, string right);
+    void drawMainMenu();
     void drawPrompt(string text);
     void drawSuccess(string text);
     void drawError(string text);

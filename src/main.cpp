@@ -74,9 +74,10 @@ void registerUser(Inventory& inv) {
 
     string pass = UI::inputString("Password");
 
-    UI::drawPrompt("Role (1=Customer, 2=Admin)");
-    int roleChoice;
-    cin >> roleChoice;
+    UI::drawSubHeader("SELECT ACCOUNT TYPE");
+    UI::drawMenuItem(1, "Customer  -- Browse, Buy, Order");
+    UI::drawMenuItem(2, "Admin     -- Manage Stock, View Orders");
+    int roleChoice = UI::inputInt("Role");
 
     if (roleChoice == 2) {
         users.push_back(new Admin(uname, pass));
@@ -315,22 +316,34 @@ int main() {
 
     while (running) {
         if (currentUser == NULL) {
-            UI::drawHeader("MAIN MENU");
-            UI::drawMenuItem(1, "Login");
-            UI::drawMenuItem(2, "Register");
-            UI::drawMenuItem(0, "Exit");
-            UI::drawSeparator('=');
-
+            UI::drawMainMenu();
             UI::drawPrompt("Choice");
             int choice;
             cin >> choice;
 
             if (choice == 1) {
+                UI::drawHeader("CUSTOMER PORTAL");
                 currentUser = login();
                 if (currentUser != NULL) {
-                    UI::drawBanner("WELCOME, " + currentUser->getUsername());
+                    if (currentUser->getRole() != "customer") {
+                        UI::drawError("This account is not a Customer account.");
+                        currentUser = NULL;
+                    } else {
+                        UI::drawBanner("WELCOME, " + currentUser->getUsername());
+                    }
                 }
             } else if (choice == 2) {
+                UI::drawHeader("ADMIN PORTAL");
+                currentUser = login();
+                if (currentUser != NULL) {
+                    if (currentUser->getRole() != "admin") {
+                        UI::drawError("This account is not an Admin account.");
+                        currentUser = NULL;
+                    } else {
+                        UI::drawBanner("WELCOME, " + currentUser->getUsername());
+                    }
+                }
+            } else if (choice == 3) {
                 registerUser(inventory);
             } else if (choice == 0) {
                 running = false;
