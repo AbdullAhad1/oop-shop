@@ -316,23 +316,42 @@ int main() {
 
     while (running) {
         if (currentUser == NULL) {
-            UI::drawMainMenu();
+            UI::drawPortalMenu();
             UI::drawPrompt("Choice");
-            int choice;
-            cin >> choice;
+            int portalChoice;
+            cin >> portalChoice;
 
-            if (choice == 1) {
-                UI::drawHeader("CUSTOMER PORTAL");
-                currentUser = login();
-                if (currentUser != NULL) {
-                    if (currentUser->getRole() != "customer") {
-                        UI::drawError("This account is not a Customer account.");
-                        currentUser = NULL;
+            if (portalChoice == 1) {
+                // CUSTOMER PORTAL
+                bool inCustomerPortal = true;
+                while (inCustomerPortal) {
+                    UI::drawHeader("CUSTOMER PORTAL");
+                    UI::drawCustomerPortal();
+                    UI::drawPrompt("Choice");
+                    int cChoice;
+                    cin >> cChoice;
+
+                    if (cChoice == 1) {
+                        currentUser = login();
+                        if (currentUser != NULL) {
+                            if (currentUser->getRole() != "customer") {
+                                UI::drawError("This account is not a Customer account.");
+                                currentUser = NULL;
+                            } else {
+                                UI::drawBanner("WELCOME, " + currentUser->getUsername());
+                                inCustomerPortal = false;
+                            }
+                        }
+                    } else if (cChoice == 2) {
+                        registerUser(inventory);
+                    } else if (cChoice == 0) {
+                        inCustomerPortal = false;
                     } else {
-                        UI::drawBanner("WELCOME, " + currentUser->getUsername());
+                        UI::drawError("Invalid choice.");
                     }
                 }
-            } else if (choice == 2) {
+            } else if (portalChoice == 2) {
+                // ADMIN PORTAL - login only
                 UI::drawHeader("ADMIN PORTAL");
                 currentUser = login();
                 if (currentUser != NULL) {
@@ -343,9 +362,7 @@ int main() {
                         UI::drawBanner("WELCOME, " + currentUser->getUsername());
                     }
                 }
-            } else if (choice == 3) {
-                registerUser(inventory);
-            } else if (choice == 0) {
+            } else if (portalChoice == 0) {
                 running = false;
             } else {
                 UI::drawError("Invalid choice.");

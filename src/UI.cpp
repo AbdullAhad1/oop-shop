@@ -121,17 +121,29 @@ namespace UI {
              << DIM << "  " << shortcut << RESET << endl;
     }
 
-    void drawMainMenu() {
+    void drawPortalMenu() {
         cout << endl;
         cout << "  " << GOLD << "┌─────────────────────────────┐" << RESET << "  " << GOLD << "┌─────────────────────────────┐" << RESET << endl;
-        cout << "  " << GOLD << "│" << BOLD << WHITE << "  [1] CUSTOMER LOGIN       " << RESET << GOLD << "│" << RESET
-             << "  " << GOLD << "│" << BOLD << WHITE << "  [2] ADMIN LOGIN          " << RESET << GOLD << "│" << RESET << endl;
+        cout << "  " << GOLD << "│" << BOLD << WHITE << "      [1] CUSTOMER        " << RESET << GOLD << "│" << RESET
+             << "  " << GOLD << "│" << BOLD << WHITE << "       [2] ADMIN          " << RESET << GOLD << "│" << RESET << endl;
         cout << "  " << GOLD << "└─────────────────────────────┘" << RESET << "  " << GOLD << "└─────────────────────────────┘" << RESET << endl;
         cout << endl;
+        cout << "              " << GOLD << "┌─────────────────────────────┐" << RESET << endl;
+        cout << "              " << GOLD << "│" << BOLD << WHITE << "         [0] EXIT         " << RESET << GOLD << "│" << RESET << endl;
+        cout << "              " << GOLD << "└─────────────────────────────┘" << RESET << endl;
+        cout << endl;
+    }
+
+    void drawCustomerPortal() {
+        cout << endl;
         cout << "  " << GOLD << "┌─────────────────────────────┐" << RESET << "  " << GOLD << "┌─────────────────────────────┐" << RESET << endl;
-        cout << "  " << GOLD << "│" << BOLD << WHITE << "  [3] SIGN UP              " << RESET << GOLD << "│" << RESET
-             << "  " << GOLD << "│" << BOLD << WHITE << "  [0] EXIT                 " << RESET << GOLD << "│" << RESET << endl;
+        cout << "  " << GOLD << "│" << BOLD << WHITE << "   [1] LOGIN              " << RESET << GOLD << "│" << RESET
+             << "  " << GOLD << "│" << BOLD << WHITE << "   [2] REGISTER           " << RESET << GOLD << "│" << RESET << endl;
         cout << "  " << GOLD << "└─────────────────────────────┘" << RESET << "  " << GOLD << "└─────────────────────────────┘" << RESET << endl;
+        cout << endl;
+        cout << "              " << GOLD << "┌─────────────────────────────┐" << RESET << endl;
+        cout << "              " << GOLD << "│" << BOLD << WHITE << "        [0] BACK          " << RESET << GOLD << "│" << RESET << endl;
+        cout << "              " << GOLD << "└─────────────────────────────┘" << RESET << endl;
         cout << endl;
     }
 
