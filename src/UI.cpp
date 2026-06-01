@@ -246,17 +246,38 @@ namespace UI {
     }
 
     void drawLogo() {
+        int width = 50;
+        string title = "BD STORE";
+        int pad = (width - (int)title.length()) / 2;
+        int rpad = width - pad - (int)title.length();
+
         cout << GOLD << endl;
-        cout << "   \u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593" << endl;
-        cout << "   \u2593" << RESET << "                                              " << GOLD << "\u2593" << endl;
-        cout << "   \u2593" << RESET << BOLD << WHITE << "     NIGHT MARKET SHOP     " << RESET << GOLD << "\u2593" << endl;
-        cout << "   \u2593" << RESET << "                                              " << GOLD << "\u2593" << endl;
-        cout << "   \u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593" << RESET << endl;
+        cout << "   ";
+        for (int i = 0; i < width; i++) cout << "\u2593";
+        cout << endl;
+
+        cout << "   " << "\u2593" << RESET;
+        for (int i = 0; i < width - 2; i++) cout << " ";
+        cout << GOLD << "\u2593" << endl;
+
+        cout << "   " << "\u2593" << RESET;
+        for (int i = 0; i < pad; i++) cout << " ";
+        cout << BOLD << WHITE << title;
+        for (int i = 0; i < rpad; i++) cout << " ";
+        cout << RESET << GOLD << "\u2593" << endl;
+
+        cout << "   " << "\u2593" << RESET;
+        for (int i = 0; i < width - 2; i++) cout << " ";
+        cout << GOLD << "\u2593" << endl;
+
+        cout << "   ";
+        for (int i = 0; i < width; i++) cout << "\u2593";
+        cout << RESET << endl;
         cout << endl;
     }
 
     void drawSmallLogo() {
-        cout << GOLD << "  [== NIGHT MARKET ==]" << RESET << endl;
+        cout << GOLD << "  [== BD STORE ==]" << RESET << endl;
     }
 
     string inputString(string prompt) {

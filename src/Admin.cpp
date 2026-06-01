@@ -1,16 +1,17 @@
 #include "../include/Admin.hpp"
+#include "../include/UI.hpp"
 #include <iostream>
 
 Admin::Admin(string u, string p) : User(u, p) {}
 
 void Admin::displayMenu() const {
-    cout << "\n===== ADMIN MENU =====" << endl;
-    cout << "1. View All Products" << endl;
-    cout << "2. Add New Product" << endl;
-    cout << "3. Update Product Stock" << endl;
-    cout << "4. Delete Product" << endl;
-    cout << "5. View All Orders" << endl;
-    cout << "0. Logout" << endl;
+    UI::drawHeader("ADMIN MENU");
+    UI::drawMenuItem(1, "View All Products");
+    UI::drawMenuItem(2, "Add New Product");
+    UI::drawMenuItem(3, "Update Product Stock");
+    UI::drawMenuItem(4, "Delete Product");
+    UI::drawMenuItem(5, "View All Orders");
+    UI::drawMenuItem(0, "Logout");
 }
 
 string Admin::getRole() const {

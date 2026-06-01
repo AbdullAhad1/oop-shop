@@ -327,6 +327,9 @@ int main() {
 
             if (choice == 1) {
                 currentUser = login();
+                if (currentUser != NULL) {
+                    UI::drawBanner("WELCOME, " + currentUser->getUsername());
+                }
             } else if (choice == 2) {
                 registerUser(inventory);
             } else if (choice == 0) {
