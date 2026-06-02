@@ -124,8 +124,8 @@ namespace UI {
     void drawPortalMenu() {
         cout << endl;
         cout << "  " << GOLD << "┌─────────────────────────────┐" << RESET << "  " << GOLD << "┌─────────────────────────────┐" << RESET << endl;
-        cout << "  " << GOLD << "│" << BOLD << WHITE << "      [1] CUSTOMER        " << RESET << GOLD << "│" << RESET
-             << "  " << GOLD << "│" << BOLD << WHITE << "       [2] ADMIN          " << RESET << GOLD << "│" << RESET << endl;
+        cout << "  " << GOLD << "│" << BOLD << WHITE << "      [1] ☺ CUSTOMER       " << RESET << GOLD << "│" << RESET
+             << "  " << GOLD << "│" << BOLD << WHITE << "       [2] ⚔ ADMIN         " << RESET << GOLD << "│" << RESET << endl;
         cout << "  " << GOLD << "└─────────────────────────────┘" << RESET << "  " << GOLD << "└─────────────────────────────┘" << RESET << endl;
         cout << endl;
         cout << "              " << GOLD << "┌─────────────────────────────┐" << RESET << endl;
