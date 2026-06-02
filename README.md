@@ -22,7 +22,7 @@
 
 ## UML Architecture
 
-![BDStore-1971 UML Class Diagram](docs/uml-diagram.png?v=2)
+![BDStore-1971 UML Class Diagram](docs/uml-class-diagram.png?v=2)
 
 *Full interactive version: [`docs/uml-handwritten.html`](docs/uml-handwritten.html) · Spec: [`docs/uml-diagram.md`](docs/uml-diagram.md)*
 
