@@ -81,10 +81,7 @@ BDStore-1971 is a terminal-based inventory and shopping application built in **C
 
 ## Download & Run
 
-### macOS
-
-1. Open Terminal
-2. Clone the repo and build
+### macOS / Linux / WSL
 
 ```bash
 git clone https://github.com/AbdullAhad1/oop-shop.git
@@ -93,50 +90,26 @@ make
 ./build/shop
 ```
 
-> **Note:** macOS Command Line Tools (`xcode-select --install`) provides `make` and `g++`.
+### Windows (MSYS2 or MinGW)
 
----
+```bash
+git clone https://github.com/AbdullAhad1/oop-shop.git
+cd oop-shop
+make
+./build/shop
+```
 
-### Windows
-
-#### Option A — MSYS2 (recommended)
-
-1. Install [MSYS2](https://www.msys2.org/)
-2. Open the **UCRT64** terminal
-3. Install GCC and Make
+If you don't have `make`, install [MSYS2](https://www.msys2.org/), open the UCRT64 terminal, and run:
 
 ```bash
 pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-make
 ```
 
-4. Clone, build, and run
+Then retry the build.
 
-```bash
-git clone https://github.com/AbdullAhad1/oop-shop.git
-cd oop-shop
-make
-./build/shop.exe
-```
+### Windows (IDE)
 
-#### Option B — WSL (Windows Subsystem for Linux)
-
-1. Open a WSL terminal (Ubuntu)
-2. Clone and build exactly like macOS
-
-```bash
-git clone https://github.com/AbdullAhad1/oop-shop.git
-cd oop-shop
-make
-./build/shop
-```
-
-#### Option C — Code::Blocks / Dev-C++
-
-1. Create a new **Console Application** project
-2. Add all `.cpp` files from `src/` and headers from `include/`
-3. Build and run inside the IDE
-
----
+Create a **Console Application** project in Code::Blocks / Dev-C++ / Visual Studio, add all `.cpp` files from `src/` and headers from `include/`, then build and run.
 
 **Default Credentials**
 
