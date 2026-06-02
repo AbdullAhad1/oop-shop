@@ -1,200 +1,205 @@
-<div align="center">
+# UML Class Diagram Spec — BDStore-1971
 
-<h1>BDStore-1971 — UML Class Diagram</h1>
-<p>Object-Oriented Design Overview</p>
+## Classes
 
-</div>
+### 1. User (abstract)
+**Stereotype:** abstract class  
+**Purpose:** Base class for all system users. Runtime polymorphism entry point.
 
----
+| Visibility | Member | Type |
+|------------|--------|------|
+| protected | username | string |
+| protected | password | string |
+| public | User(string u, string p) | constructor |
+| public | ~User() | destructor |
+| public | getUsername() | string |
+| public | checkPassword(string p) | bool |
+| public | displayMenu() | void | *pure virtual* |
+| public | getRole() | string | *pure virtual* |
 
-## Class Diagram
+### 2. Customer — extends User
+**Stereotype:** concrete class  
+**Purpose:** Customer portal user. Browse, cart, checkout.
 
-```mermaid
-classDiagram
-    direction TB
+| Visibility | Member | Type |
+|------------|--------|------|
+| public | Customer(string u, string p) | constructor |
+| public | displayMenu() | void | *override* |
+| public | getRole() | string | *override* |
 
-    %% ======== INHERITANCE HIERARCHY ========
-    class User {
-        &lt;&lt;abstract&gt;&gt;
-        # username : string
-        # password : string
-        + User(string u, string p)
-        + ~User()
-        + getUsername() string
-        + checkPassword(string p) bool
-        + displayMenu() void
-        + getRole() string
-    }
+### 3. Admin — extends User
+**Stereotype:** concrete class  
+**Purpose:** Admin portal user. Manage inventory and view orders.
 
-    class Customer {
-        + Customer(string u, string p)
-        + displayMenu() void
-        + getRole() string
-    }
+| Visibility | Member | Type |
+|------------|--------|------|
+| public | Admin(string u, string p) | constructor |
+| public | displayMenu() | void | *override* |
+| public | getRole() | string | *override* |
 
-    class Admin {
-        + Admin(string u, string p)
-        + displayMenu() void
-        + getRole() string
-    }
+### 4. Product
+**Stereotype:** entity class  
+**Purpose:** Represents a sellable item.
 
-    User <|-- Customer : inherits
-    User <|-- Admin : inherits
+| Visibility | Member | Type |
+|------------|--------|------|
+| private | productId | int |
+| private | name | string |
+| private | description | string |
+| private | price | double |
+| private | stockQuantity | int |
+| public | Product() | constructor |
+| public | Product(int id, string n, string d, double p, int qty) | constructor |
+| public | getId() | int |
+| public | getName() | string |
+| public | getDescription() | string |
+| public | getPrice() | double |
+| public | getStock() | int |
+| public | setName(string n) | void |
+| public | setDescription(string d) | void |
+| public | setPrice(double p) | void |
+| public | setStock(int qty) | void |
+| public | reduceStock(int qty) | void |
+| public | toFileString() | string |
+| public | fromFileString(string line) | Product | *static* |
 
-    %% ======== PRODUCT & INVENTORY ========
-    class Product {
-        - productId : int
-        - name : string
-        - description : string
-        - price : double
-        - stockQuantity : int
-        + Product()
-        + Product(int id, string n, string d, double p, int qty)
-        + getId() int
-        + getName() string
-        + getDescription() string
-        + getPrice() double
-        + getStock() int
-        + setName(string n) void
-        + setDescription(string d) void
-        + setPrice(double p) void
-        + setStock(int qty) void
-        + reduceStock(int qty) void
-        + toFileString() string
-        + fromFileString(string line) Product$
-    }
+### 5. Inventory
+**Stereotype:** controller / manager class  
+**Purpose:** Manages the collection of products. Loads/saves from file.
 
-    class Inventory {
-        - products : vector~Product~
-        - filename : string
-        - nextProductId : int
-        + Inventory(string fname)
-        + loadFromFile() void
-        + saveToFile() void
-        + addProduct(Product p) void
-        + updateProduct(int id, Product p) void
-        + deleteProduct(int id) void
-        + findProduct(int id) Product*
-        + displayAll() void
-        + displayAvailable() void
-        + getProducts() vector~Product~
-        + getNextId() int
-    }
+| Visibility | Member | Type |
+|------------|--------|------|
+| private | products | vector<Product> |
+| private | filename | string |
+| private | nextProductId | int |
+| public | Inventory(string fname) | constructor |
+| public | loadFromFile() | void |
+| public | saveToFile() | void |
+| public | addProduct(Product p) | void |
+| public | updateProduct(int id, Product p) | void |
+| public | deleteProduct(int id) | void |
+| public | findProduct(int id) | Product* |
+| public | displayAll() | void |
+| public | displayAvailable() | void |
+| public | getProducts() | vector<Product> |
+| public | getNextId() | int |
 
-    Inventory "1" o-- "0..*" Product : manages
+### 6. CartItem
+**Stereotype:** data struct  
+**Purpose:** Lightweight item inside a cart or order.
 
-    %% ======== CART ========
-    class CartItem {
-        + productId : int
-        + quantity : int
-    }
+| Visibility | Member | Type |
+|------------|--------|------|
+| public | productId | int |
+| public | quantity | int |
 
-    class Cart {
-        - items : vector~CartItem~
-        + addItem(int pid, int qty, Inventory& inv) void
-        + removeItem(int pid) void
-        + updateQuantity(int pid, int qty, Inventory& inv) void
-        + clear() void
-        + viewCart(Inventory& inv) void
-        + getTotal(Inventory& inv) double
-        + getItems() vector~CartItem~
-        + isEmpty() bool
-    }
+### 7. Cart
+**Stereotype:** controller class  
+**Purpose:** Holds customer-selected items before checkout.
 
-    Cart "1" *-- "0..*" CartItem : contains
+| Visibility | Member | Type |
+|------------|--------|------|
+| private | items | vector<CartItem> |
+| public | addItem(int pid, int qty, Inventory& inv) | void |
+| public | removeItem(int pid) | void |
+| public | updateQuantity(int pid, int qty, Inventory& inv) | void |
+| public | clear() | void |
+| public | viewCart(Inventory& inv) | void |
+| public | getTotal(Inventory& inv) | double |
+| public | getItems() | vector<CartItem> |
+| public | isEmpty() | bool |
 
-    %% ======== ORDER ========
-    class Order {
-        - orderId : int
-        - customerUsername : string
-        - orderDate : string
-        - totalAmount : double
-        - status : string
-        - items : vector~CartItem~
-        + Order()
-        + Order(int oid, string user, string date, double total, string stat, vector~CartItem~ its)
-        + getOrderId() int
-        + getCustomer() string
-        + getTotal() double
-        + getDate() string
-        + getStatus() string
-        + getItems() vector~CartItem~
-        + toFileString() string
-        + fromFileString(string line) Order$
-    }
+### 8. Order
+**Stereotype:** entity class  
+**Purpose:** Finalized purchase record.
 
-    Order "1" *-- "0..*" CartItem : contains
+| Visibility | Member | Type |
+|------------|--------|------|
+| private | orderId | int |
+| private | customerUsername | string |
+| private | orderDate | string |
+| private | totalAmount | double |
+| private | status | string |
+| private | items | vector<CartItem> |
+| public | Order() | constructor |
+| public | Order(int oid, string user, string date, double total, string stat, vector<CartItem> its) | constructor |
+| public | getOrderId() | int |
+| public | getCustomer() | string |
+| public | getTotal() | double |
+| public | getDate() | string |
+| public | getStatus() | string |
+| public | getItems() | vector<CartItem> |
+| public | toFileString() | string |
+| public | fromFileString(string line) | Order | *static* |
 
-    %% ======== EXCEPTION ========
-    class std_exception {
-        <<standard>>
-    }
+### 9. ShopException — extends std::exception
+**Stereotype:** exception class  
+**Purpose:** Domain-specific error handling.
 
-    class ShopException {
-        - message : string
-        + ShopException(string msg)
-        + ~ShopException()
-        + what() const char*
-    }
+| Visibility | Member | Type |
+|------------|--------|------|
+| private | message | string |
+| public | ShopException(string msg) | constructor |
+| public | ~ShopException() | destructor |
+| public | what() | const char* |
 
-    std_exception <|-- ShopException : extends
+### 10. UI (namespace)
+**Stereotype:** utility namespace  
+**Purpose:** Terminal styling, input helpers, screen management. All methods static.
 
-    %% ======== UI NAMESPACE ========
-    class UI {
-        <<namespace>>
-        + clearScreen() void$
-        + drawHeader(string title) void$
-        + drawSubHeader(string text) void$
-        + drawSeparator(char c) void$
-        + drawMenuItem(int num, string label) void$
-        + drawPortalMenu() void$
-        + drawCustomerPortal() void$
-        + drawSuccess(string text) void$
-        + drawError(string text) void$
-        + drawWarning(string text) void$
-        + drawInfo(string text) void$
-        + drawBanner(string text) void$
-        + drawTableHeader(...) void$
-        + drawTableRow(...) void$
-        + drawProductCard(...) void$
-        + drawLogo() void$
-        + drawSmallLogo() void$
-        + inputString(string prompt) string$
-        + inputInt(string prompt) int$
-        + inputDouble(string prompt) double$
-    }
+| Visibility | Member | Type |
+|------------|--------|------|
+| public | clearScreen() | void$ |
+| public | drawHeader(string title) | void$ |
+| public | drawSubHeader(string text) | void$ |
+| public | drawSeparator(char c) | void$ |
+| public | drawMenuItem(int num, string label) | void$ |
+| public | drawPortalMenu() | void$ |
+| public | drawCustomerPortal() | void$ |
+| public | drawSuccess(string) | void$ |
+| public | drawError(string) | void$ |
+| public | drawWarning(string) | void$ |
+| public | drawInfo(string) | void$ |
+| public | drawBanner(string) | void$ |
+| public | drawTableHeader(string c1, string c2, string c3) | void$ |
+| public | drawTableRow(string c1, string c2, string c3) | void$ |
+| public | drawProductCard(int id, string name, string desc, double price, int stock) | void$ |
+| public | drawLogo() | void$ |
+| public | drawSmallLogo() | void$ |
+| public | inputString(string prompt) | string$ |
+| public | inputInt(string prompt) | int$ |
+| public | inputDouble(string prompt) | double$ |
 
-    %% ======== USAGE RELATIONSHIPS ========
-    Customer ..> Cart : uses
-    Customer ..> Inventory : browses
-    Customer ..> Order : places
-    Admin ..> Inventory : manages
-    Admin ..> Order : views
-    Cart ..> Inventory : queries
-```
-
----
-
-## Relationship Summary
-
-| Type | From | To | Meaning |
-|------|------|-----|---------|
-| Inheritance | `Customer` | `User` | Customer is a User |
-| Inheritance | `Admin` | `User` | Admin is a User |
-| Inheritance | `ShopException` | `std::exception` | Custom domain exception |
-| Composition | `Cart` | `CartItem` | Cart owns its items |
-| Composition | `Order` | `CartItem` | Order owns its items |
-| Aggregation | `Inventory` | `Product` | Inventory manages Products |
-| Dependency | `Customer` | `Cart`, `Inventory`, `Order` | Customer uses these |
-| Dependency | `Admin` | `Inventory`, `Order` | Admin uses these |
-| Dependency | `Cart` | `Inventory` | Cart queries stock |
+*Note: $ = static method*
 
 ---
 
-## Design Notes
+## Relationships
 
-- **Runtime Polymorphism** is demonstrated via the `User*` pointer in `main.cpp`: it holds either a `Customer` or `Admin` object, and calling `displayMenu()` or `getRole()` dispatches to the correct derived class at runtime.
-- **Abstraction** is enforced by making `User` abstract (pure virtual methods), preventing direct instantiation.
-- **Composition** is used for `Cart`→`CartItem` and `Order`→`CartItem`, meaning items are owned and destroyed with their container.
-- **Aggregation** is used for `Inventory`→`Product`, as Products can exist independently (e.g., loaded from/saved to file).
-- **Encapsulation** keeps all data members private; controlled access through public getters/setters.
+| Type | From | To | Label | Description |
+|------|------|----|-------|-------------|
+| Inheritance | Customer | User | extends | Customer is a User |
+| Inheritance | Admin | User | extends | Admin is a User |
+| Inheritance | ShopException | std::exception | extends | Custom error type |
+| Composition | Cart | CartItem | contains | Cart owns items, destroyed together |
+| Composition | Order | CartItem | contains | Order owns items, destroyed together |
+| Aggregation | Inventory | Product | manages | Products exist independently via file I/O |
+| Dependency | Customer | Cart | uses | Customer adds/removes items |
+| Dependency | Customer | Inventory | browses | Customer views available products |
+| Dependency | Customer | Order | places | Customer creates orders at checkout |
+| Dependency | Admin | Inventory | manages | Admin adds/updates/deletes products |
+| Dependency | Admin | Order | views | Admin sees all customer orders |
+| Dependency | Cart | Inventory | queries | Cart checks stock before adding items |
+
+---
+
+## Design Notes for Visualizer
+
+- **User hierarchy** should be top-center. Abstract class in italics/gray. Inheritance arrows point upward.
+- **Product–Inventory** left side. Inventory as manager box with a hollow diamond (aggregation) pointing to Product.
+- **Cart–CartItem** center-right. Solid diamond (composition) from Cart to CartItem.
+- **Order** far right. Solid diamond (composition) from Order to CartItem. Order also links to Customer via username string (not direct object reference — dashed line optional).
+- **ShopException** top-right corner. Inheritance arrow to std::exception.
+- **UI namespace** bottom-left. Large box with `$` labels on every method.
+- **Dependencies** from Customer/Admin to their respective target classes as dashed arrows.
+- Color convention suggestion: private = red, protected = yellow, public = green, static = purple.
