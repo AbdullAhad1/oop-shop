@@ -79,22 +79,64 @@ BDStore-1971 is a terminal-based inventory and shopping application built in **C
 
 ---
 
-## Quick Start
+## Download & Run
+
+### macOS
+
+1. Open Terminal
+2. Clone the repo and build
 
 ```bash
-# Clone the repo
 git clone https://github.com/AbdullAhad1/oop-shop.git
 cd oop-shop
-
-# Build
 make
-
-# Run
 ./build/shop
-
-# Clean build artifacts
-make clean
 ```
+
+> **Note:** macOS Command Line Tools (`xcode-select --install`) provides `make` and `g++`.
+
+---
+
+### Windows
+
+#### Option A — MSYS2 (recommended)
+
+1. Install [MSYS2](https://www.msys2.org/)
+2. Open the **UCRT64** terminal
+3. Install GCC and Make
+
+```bash
+pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-make
+```
+
+4. Clone, build, and run
+
+```bash
+git clone https://github.com/AbdullAhad1/oop-shop.git
+cd oop-shop
+make
+./build/shop.exe
+```
+
+#### Option B — WSL (Windows Subsystem for Linux)
+
+1. Open a WSL terminal (Ubuntu)
+2. Clone and build exactly like macOS
+
+```bash
+git clone https://github.com/AbdullAhad1/oop-shop.git
+cd oop-shop
+make
+./build/shop
+```
+
+#### Option C — Code::Blocks / Dev-C++
+
+1. Create a new **Console Application** project
+2. Add all `.cpp` files from `src/` and headers from `include/`
+3. Build and run inside the IDE
+
+---
 
 **Default Credentials**
 
