@@ -16,12 +16,11 @@ private:
 public:
     void addItem(int pid, int qty, Inventory& inv);
     void removeItem(int pid);
-    void updateQuantity(int pid, int qty, Inventory& inv);
-    void clear();
-    void viewCart(Inventory& inv) const;
-    double getTotal(Inventory& inv) const;
-    vector<CartItem> getItems() const;
-    bool isEmpty() const;
+    void clear() { items.clear(); }
+    void viewCart(Inventory& inv);
+    double getTotal(Inventory& inv);
+    vector<CartItem> getItems() { return items; }
+    bool isEmpty() { return items.empty(); }
 };
 
 #endif

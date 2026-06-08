@@ -1,8 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++98 -Wall -Wextra -I./include
 
-SRC = src/ShopException.cpp \
-      src/User.cpp \
+SRC = src/User.cpp \
       src/Customer.cpp \
       src/Admin.cpp \
       src/Product.cpp \

@@ -15,7 +15,6 @@ public:
     string getUsername() const;
     bool checkPassword(string p) const;
 
-    // Runtime polymorphism: pure virtual functions
     virtual void displayMenu() const = 0;
     virtual string getRole() const = 0;
 };

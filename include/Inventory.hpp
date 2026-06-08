@@ -9,21 +9,18 @@ class Inventory {
 private:
     vector<Product> products;
     string filename;
-    int nextProductId;
+    int nextId;
 public:
     Inventory(string fname);
 
-    void loadFromFile();
-    void saveToFile();
-
-    void addProduct(Product p);
-    void updateProduct(int id, Product p);
+    void addProduct(string n, string d, double p, int qty);
     void deleteProduct(int id);
+    void updateStock(int id, int qty);
     Product* findProduct(int id);
-    void displayAll() const;
-    void displayAvailable() const;
-    vector<Product> getProducts() const;
-    int getNextId();
+    void displayAll();
+    void displayAvailable();
+    int getNextId() { return nextId++; }
+    void saveToFile();
 };
 
 #endif

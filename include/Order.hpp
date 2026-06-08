@@ -9,23 +9,15 @@ class Order {
 private:
     int orderId;
     string customerUsername;
-    string orderDate;
     double totalAmount;
-    string status;
     vector<CartItem> items;
 public:
-    Order();
-    Order(int oid, string user, string date, double total, string stat, vector<CartItem> its);
+    Order(int oid, string user, double total, vector<CartItem> its);
 
-    int getOrderId() const;
-    string getCustomer() const;
-    double getTotal() const;
-    string getDate() const;
-    string getStatus() const;
-    vector<CartItem> getItems() const;
-
-    string toFileString() const;
-    static Order fromFileString(string line);
+    int getOrderId() const { return orderId; }
+    string getCustomer() const { return customerUsername; }
+    double getTotal() const { return totalAmount; }
+    vector<CartItem> getItems() const { return items; }
 };
 
 #endif

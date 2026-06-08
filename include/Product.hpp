@@ -12,23 +12,18 @@ private:
     double price;
     int stockQuantity;
 public:
-    Product();
     Product(int id, string n, string d, double p, int qty);
 
-    int getId() const;
-    string getName() const;
-    string getDescription() const;
-    double getPrice() const;
-    int getStock() const;
+    int getId() const { return productId; }
+    string getName() const { return name; }
+    string getDescription() const { return description; }
+    double getPrice() const { return price; }
+    int getStock() const { return stockQuantity; }
 
-    void setName(string n);
-    void setDescription(string d);
-    void setPrice(double p);
-    void setStock(int qty);
+    void setStock(int qty) { stockQuantity = qty; }
+    void reduceStock(int qty) { stockQuantity -= qty; }
 
-    void reduceStock(int qty);
-
-    string toFileString() const;
+    string toFileString();
     static Product fromFileString(string line);
 };
 

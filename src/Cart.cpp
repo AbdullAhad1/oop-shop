@@ -1,108 +1,53 @@
 #include "../include/Cart.hpp"
-#include "../include/ShopException.hpp"
 #include <iostream>
-#include <iomanip>
+using namespace std;
 
 void Cart::addItem(int pid, int qty, Inventory& inv) {
-    if (qty <= 0) {
-        throw ShopException("Quantity must be greater than zero.");
-    }
-
+    if (qty <= 0) { cout << "Quantity must be > 0." << endl; return; }
     Product* p = inv.findProduct(pid);
-    if (p == NULL) {
-        throw ShopException("Product not found.");
-    }
-    if (p->getStock() < qty) {
-        throw ShopException("Not enough stock available.");
-    }
-
+    if (p == NULL) { cout << "Product not found." << endl; return; }
+    if (p->getStock() < qty) { cout << "Not enough stock." << endl; return; }
     for (size_t i = 0; i < items.size(); i++) {
-        if (items[i].productId == pid) {
-            items[i].quantity += qty;
-            return;
-        }
+        if (items[i].productId == pid) { items[i].quantity += qty; return; }
     }
-
-    CartItem item;
-    item.productId = pid;
-    item.quantity = qty;
+    CartItem item; item.productId = pid; item.quantity = qty;
     items.push_back(item);
+    cout << "Added to cart." << endl;
 }
 
 void Cart::removeItem(int pid) {
     for (size_t i = 0; i < items.size(); i++) {
         if (items[i].productId == pid) {
             items.erase(items.begin() + i);
+            cout << "Removed from cart." << endl;
             return;
         }
     }
-    throw ShopException("Product not in cart.");
+    cout << "Product not in cart." << endl;
 }
 
-void Cart::updateQuantity(int pid, int qty, Inventory& inv) {
-    if (qty <= 0) {
-        removeItem(pid);
-        return;
-    }
-
-    Product* p = inv.findProduct(pid);
-    if (p == NULL) {
-        throw ShopException("Product not found.");
-    }
-    if (p->getStock() < qty) {
-        throw ShopException("Not enough stock available.");
-    }
-
-    for (size_t i = 0; i < items.size(); i++) {
-        if (items[i].productId == pid) {
-            items[i].quantity = qty;
-            return;
-        }
-    }
-    throw ShopException("Product not in cart.");
-}
-
-void Cart::clear() {
-    items.clear();
-}
-
-void Cart::viewCart(Inventory& inv) const {
-    if (items.empty()) {
-        cout << "Cart is empty." << endl;
-        return;
-    }
-
-    cout << "\n----- YOUR CART -----" << endl;
+void Cart::viewCart(Inventory& inv) {
+    if (items.empty()) { cout << "Cart is empty." << endl; return; }
+    cout << "\n===== YOUR CART =====" << endl;
     double total = 0;
     for (size_t i = 0; i < items.size(); i++) {
         Product* p = inv.findProduct(items[i].productId);
         if (p != NULL) {
-            double subtotal = p->getPrice() * items[i].quantity;
-            total += subtotal;
-            cout << "ID: " << items[i].productId
-                 << " | " << p->getName()
+            double sub = p->getPrice() * items[i].quantity;
+            total += sub;
+            cout << items[i].productId << " | " << p->getName()
                  << " | Qty: " << items[i].quantity
-                 << " | Subtotal: $" << fixed << setprecision(2) << subtotal << endl;
+                 << " | $" << sub << endl;
         }
     }
-    cout << "TOTAL: $" << fixed << setprecision(2) << total << endl;
+    cout << "TOTAL: $" << total << endl;
 }
 
-double Cart::getTotal(Inventory& inv) const {
+double Cart::getTotal(Inventory& inv) {
     double total = 0;
     for (size_t i = 0; i < items.size(); i++) {
         Product* p = inv.findProduct(items[i].productId);
-        if (p != NULL) {
-            total += p->getPrice() * items[i].quantity;
-        }
+        if (p != NULL) total += p->getPrice() * items[i].quantity;
     }
     return total;
-}
-
-vector<CartItem> Cart::getItems() const {
-    return items;
-}
-
-bool Cart::isEmpty() const {
-    return items.empty();
 }
