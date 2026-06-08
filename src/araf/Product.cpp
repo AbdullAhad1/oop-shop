@@ -1,4 +1,4 @@
-#include "../include/Product.hpp"
+#include "../../include/Product.hpp"
 #include <sstream>
 
 Product::Product(int id, string n, string d, double p, int qty) {

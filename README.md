@@ -30,39 +30,37 @@
 
 ## Overview
 
-BDStore-1971 is a terminal-based inventory and shopping application built in **C++98** as an Object-Oriented Programming group project. It demonstrates six core OOP principles through a functional CLI with ANSI-styled output, file persistence, and role-based access control.
+BDStore-1971 is a terminal-based inventory and shopping application built in **C++98** as an Object-Oriented Programming group project. It demonstrates six core OOP principles through a functional CLI with file persistence and role-based access control.
 
 **Key highlights:**
 - Inheritance + Polymorphism for User roles (`Customer` / `Admin`)
 - Encapsulation with controlled getters/setters
 - Composition for Cart and Inventory management
-- Custom exception handling extending `std::exception`
 - File-based data persistence (`data/*.txt`)
-- Terminal UI with colors, banners, and box drawing
+- Simple terminal UI with plain text menus
 
 ---
 
 ## Team
 
-| Member | GitHub | Module Ownership |
-|--------|--------|------------------|
-| **Ahad Abdul** | [@AbdullAhad1](https://github.com/AbdullAhad1) | UI Namespace, Main Orchestration, Integration |
-| **Sayfaz Islam** | [@sayfazislam-hash](https://github.com/sayfazislam-hash) | User System, Authentication, Role Split |
-| **Araf Chowdhury** | [@araf582004-blip](https://github.com/araf582004-blip) | Product, Inventory, Cart, Order Core |
+| Member | GitHub | Module Ownership | Directory |
+|--------|--------|------------------|-----------|
+| **Ahad Abdul** | [@AbdullAhad1](https://github.com/AbdullAhad1) | UI Namespace, Main Orchestration, Integration | `src/ahad/` |
+| **Sayfaz Islam** | [@sayfazislam-hash](https://github.com/sayfazislam-hash) | User System, Authentication, Role Split | `src/sayfaz/` |
+| **Araf Chowdhury** | [@araf582004-blip](https://github.com/araf582004-blip) | Product, Inventory, Cart, Order Core | `src/araf/` |
 
 ---
 
 ## OOP Concepts Applied
 
-| Principle | Where |
+|| Principle | Where |
 |-----------|-------|
-| **Inheritance** | `Customer` and `Admin` inherit from abstract `User` |
-| **Polymorphism** | `User*` base pointer dispatches `displayMenu()` and `getRole()` at runtime |
-| **Encapsulation** | Private fields + public getters/setters in `Product`, `Cart`, `Inventory`, `Order` |
-| **Abstraction** | `User` is abstract with pure virtual functions |
-| **Composition** | `Cart` contains `CartItem`s; `Order` contains `CartItem`s; `Inventory` manages `Product`s |
-| **Exception Handling** | `ShopException` extends `std::exception` for domain-specific errors |
-| **File I/O** | Load/save products, users, and orders to `.txt` files |
+|| **Inheritance** | `Customer` and `Admin` inherit from abstract `User` |
+|| **Polymorphism** | `User*` base pointer dispatches `displayMenu()` and `getRole()` at runtime |
+|| **Encapsulation** | Private fields + public getters/setters in `Product`, `Cart`, `Inventory`, `Order` |
+|| **Abstraction** | `User` is abstract with pure virtual functions |
+|| **Composition** | `Cart` contains `CartItem`s; `Order` contains `CartItem`s; `Inventory` manages `Product`s |
+|| **File I/O** | Load/save products, users, and orders to `.txt` files |
 
 ---
 
@@ -73,7 +71,7 @@ BDStore-1971 is a terminal-based inventory and shopping application built in **C
 | **Customer** | Browse catalog, add/remove cart items, checkout, view order history |
 | **Admin** | Add / update / delete products, view all customer orders |
 
-- ANSI-colored terminal UI with banners, separators, and product cards
+- Simple terminal UI with plain text menus
 - Persistent storage via flat text files (`data/`)
 - Runtime role validation (no cross-portal login)
 
@@ -125,7 +123,7 @@ Register new Customer or Admin accounts from the main portal menu.
 
 ```
 .
-├── include/          # Header files (.hpp)
+├── include/          # Shared header files (.hpp)
 │   ├── User.hpp
 │   ├── Customer.hpp
 │   ├── Admin.hpp
@@ -133,24 +131,24 @@ Register new Customer or Admin accounts from the main portal menu.
 │   ├── Cart.hpp
 │   ├── Order.hpp
 │   ├── Inventory.hpp
-│   ├── ShopException.hpp
 │   └── UI.hpp
-├── src/               # Implementation files (.cpp)
-│   ├── main.cpp
+├── src/ahad/         # Ahad Abdul — UI, Main Orchestration
+│   ├── UI.cpp
+│   └── main.cpp
+├── src/sayfaz/       # Sayfaz Islam — User System, Auth
 │   ├── User.cpp
 │   ├── Customer.cpp
-│   ├── Admin.cpp
+│   └── Admin.cpp
+├── src/araf/         # Araf Chowdhury — Product, Inventory, Cart, Order
 │   ├── Product.cpp
-│   ├── Cart.cpp
-│   ├── Order.cpp
 │   ├── Inventory.cpp
-│   ├── ShopException.cpp
-│   └── UI.cpp
+│   ├── Cart.cpp
+│   └── Order.cpp
 ├── data/              # Data persistence files
 ├── docs/              # UML diagrams and documentation
-│   ├── uml-diagram.md     # Full class spec
-│   ├── uml-diagram.png    # PNG render of the diagram
-│   └── uml-handwritten.html  # Interactive handwritten UML
+│   ├── uml-diagram.md
+│   ├── uml-diagram.png
+│   └── uml-handwritten.html
 ├── Makefile
 └── README.md
 ```
@@ -159,18 +157,17 @@ Register new Customer or Admin accounts from the main portal menu.
 
 ## Class Summary
 
-| Class | Stereotype | Role |
-|-------|------------|------|
-| `User` | Abstract | Base class for runtime polymorphism |
-| `Customer` | Concrete | Customer portal user |
-| `Admin` | Concrete | Admin portal user |
-| `Product` | Entity | Sellable item with file I/O |
-| `Inventory` | Controller | Product collection manager |
-| `CartItem` | Struct | Lightweight item in cart/order |
-| `Cart` | Controller | Customer shopping cart logic |
-| `Order` | Entity | Finalized purchase record |
-| `ShopException` | Exception | Custom error type |
-| `UI` | Namespace | Terminal styling and input helpers |
+| Class | Stereotype | Role | Owner |
+|-------|------------|------|-------|
+| `User` | Abstract | Base class for runtime polymorphism | Sayfaz |
+| `Customer` | Concrete | Customer portal user | Sayfaz |
+| `Admin` | Concrete | Admin portal user | Sayfaz |
+| `Product` | Entity | Sellable item with file I/O | Araf |
+| `Inventory` | Controller | Product collection manager | Araf |
+| `CartItem` | Struct | Lightweight item in cart/order | Araf |
+| `Cart` | Controller | Customer shopping cart logic | Araf |
+| `Order` | Entity | Finalized purchase record | Araf |
+| `UI` | Namespace | Terminal styling and input helpers | Ahad |
 
 ---
 

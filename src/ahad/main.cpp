@@ -5,14 +5,14 @@
 #include <fstream>
 #include <sstream>
 
-#include "../include/User.hpp"
-#include "../include/Customer.hpp"
-#include "../include/Admin.hpp"
-#include "../include/Product.hpp"
-#include "../include/Inventory.hpp"
-#include "../include/Cart.hpp"
-#include "../include/Order.hpp"
-#include "../include/UI.hpp"
+#include "../../include/User.hpp"
+#include "../../include/Customer.hpp"
+#include "../../include/Admin.hpp"
+#include "../../include/Product.hpp"
+#include "../../include/Inventory.hpp"
+#include "../../include/Cart.hpp"
+#include "../../include/Order.hpp"
+#include "../../include/UI.hpp"
 
 using namespace std;
 

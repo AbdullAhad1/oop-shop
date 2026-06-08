@@ -1,4 +1,4 @@
-#include "../include/Inventory.hpp"
+#include "../../include/Inventory.hpp"
 #include <fstream>
 #include <iostream>
 
